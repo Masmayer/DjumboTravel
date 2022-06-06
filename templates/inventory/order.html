@@ -1,0 +1,111 @@
+{% extends "dashboard/base/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block stylesheets %}
+    <!-- <script src="{% static 'js/jquery.min.js' %}"></script> -->
+    <!-- <script src="{% static 'js/jquery.formset.js' %}"></script> -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.min.js" integrity="sha512-ltwjKsDTo3hW/wV66ZaEkf2wOAFxmg7rWM76J8kOcYKLSKy44WBYO/BFaNNH3NGDS8BSz3meB9wtSnm41oL+pA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">    
+        $(function () {
+            $(".inline.{{ line_formset.prefix }}").formset({
+                prefix: '{{ line_formset.prefix }}',
+                addCssClass: "add-row btn btn-success",
+                deleteCssClass: "delete-row",
+                addText: "Add Unit",
+                deleteText: '<i class="fa fa-trash text-danger pl-4 pt-4 h4"></i>',
+                formCssClass: "inline-form",
+            });
+        });
+    </script> -->
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="menu-container">
+        <div class="animated fadeIn">
+            <div class="card row bg-info text-white">
+                <div class="col-md-12 bg-info text-white p-4">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 mb-3">
+                            <h3>
+                                <i class="fa fa-edit"></i> <strong class="my-floor"> CREATE ORDER</strong>
+                            </h3>
+                        </div>                        
+                    </div>
+                </div>
+                <div class="col-md-12 bg-white text-dark pt-2 px-0">
+                    <form class="col my-auto p-3" method="POST" accept-charset="UTF-8">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.base|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.date|as_crispy_field }}
+                            </div>
+                            <div class="col-md-12">
+                                <h2 class="page-header">Order Line</h2>
+                                {{ line_formset.management_form }}
+                                {{ line_formset.non_field_errors }}
+                                <table class="table table-striped table-bordered">
+                                    <thead class="bg-info text-white">
+                                    <tr>
+                                        <th>
+                                            <span class="text-danger">*</span>
+                                            Item
+                                        </th>
+                                        <th>
+                                            <span class="text-danger">*</span>
+                                            Quantity
+                                        </th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for line_form in line_formset %}
+                                        <tr class="formset-form  inline {{ line_formset.prefix }}">
+                                            {{ line_form.id }}
+                                            <td>
+                                                {{ line_form.product_id|as_crispy_field }}
+                                            </td>
+                                            <td>
+                                                {{ line_form.quantity|as_crispy_field }}
+                                            </td>
+                                            <td>{{ line_form.DELETE }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="my-auto col-sm-4 mx-auto">
+                            <div class="margin-Update-five-persent">
+                                <!-- button -->
+                                <button id="loader" class="btn btn-sm btn-outline-info font-saira w-100 mt-2" type="button" hidden><i class="fa fa-spinner fa-spin mr-1"></i>Create...</button>
+                                <button id="submit" class="btn btn-sm btn-info font-saira w-100 mt-2" type="submit"><i class="fas fa-sign-in-alt mr-1"></i>Create</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.min.js" integrity="sha512-ltwjKsDTo3hW/wV66ZaEkf2wOAFxmg7rWM76J8kOcYKLSKy44WBYO/BFaNNH3NGDS8BSz3meB9wtSnm41oL+pA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">    
+        $(function () {
+            $(".inline.{{ line_formset.prefix }}").formset({
+                prefix: '{{ line_formset.prefix }}',
+                addCssClass: "add-row btn btn-success",
+                deleteCssClass: "delete-row",
+                addText: "Add Unit",
+                deleteText: '<i class="fa fa-trash text-danger pl-4 pt-4 h4"></i>',
+                formCssClass: "inline-form",
+            });
+        });
+    </script>
+{% endblock scripts %}

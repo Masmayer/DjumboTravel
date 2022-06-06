@@ -1,0 +1,71 @@
+{% extends "dashboard/base/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block stylesheets %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="menu-container">
+        <div class="animated fadeIn">
+            <div class="card row bg-info text-white">
+                <div class="col-md-12 bg-info text-white p-4">
+                    <div class="row">
+                        <div class="col-md-8 col-lg-8 mb-3">
+                            <h3>
+                                <i class="fa fa-edit"></i> <strong class="my-floor"> ORDER DETAILS</strong>
+                            </h3>
+                        </div>
+                        <div class="col-md-4 col-lg-4 text-center">
+                            {% if request.user.user_type == 'provider' and object.attendant_id.plane_id.status == 'land'%}
+                                <a href="{% url 'inventory:fill_order' object.pk %}" class="btn btn-primary text-right">FILL THIS ORDER</a>
+                            {% endif %}
+                            <a href="{% url 'inventory:download_order_pdf' object.pk %}" class="btn btn-secondary text-right">DOWNLOAD</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 bg-white text-dark p-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h6>Attendant: {{ object.attendant_id.user_id.name }}</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Base: {{ object.base }}</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Date: {{ object.date }}</h6>
+                        </div>
+                        <div class="col-md-12">
+                            <table class="table table-strip table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>SL</th>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Filled Quantity</th>
+                                        <th>Price</th>
+                                        <th>Total Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in object.orderline.all %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ product.product_id }}</td>
+                                        <td>{{ product.quantity }}</td>
+                                        <td>{{ product.fill_quantity }}</td>
+                                        <td>{{ product.product_id.price }}</td>
+                                        <td>{{ product.total_product_price }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

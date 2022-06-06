@@ -1,0 +1,78 @@
+{% extends "dashboard/base/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block stylesheets %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="menu-container">
+        <div class="animated fadeIn">
+            <div class="card row bg-info text-white">
+                <div class="col-md-12 bg-info text-white p-4">
+                    <div class="row">
+                        <div class="col-md-8 col-lg-8 mb-3">
+                            <h3>
+                                <i class="fa fa-edit"></i> <strong class="my-floor"> FILL ORDER</strong>
+                            </h3>
+                        </div>                 
+                    </div>
+                </div>
+                <div class="col-md-12 bg-white text-dark p-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h6>Attendant: {{ object.attendant_id.user_id.name }}</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Base: {{ object.base }}</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Date: {{ object.date }}</h6>
+                        </div>
+                        <div class="col-md-12">
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <p class="text-danger text-center font-weight-bold p-4">{{ message }}</p>
+                                    {% endfor %}
+                                {% endif %}
+                                <table class="table table-strip table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>SL</th>
+                                            <th>Product</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            <th>Total Price</th>
+                                            <th>Fill Quantity</th>
+                                            <th>Add Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for product in object.orderline.all %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ product.product_id }}</td>
+                                            <td>{{ product.quantity }}</td>
+                                            <td>{{ product.product_id.price }}</td>
+                                            <td>{{ product.total_product_price }}</td>
+                                            <td>{{ product.fill_quantity }}</td>
+                                            <td>
+                                                <input type="number" class="form-control" name="{{ product.id }}_quantity" id="{{ product.id }}_quantity" placeholder="Enter quantity">
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <button class="btn btn-primary" type="submit">FILL THIS ORDER</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

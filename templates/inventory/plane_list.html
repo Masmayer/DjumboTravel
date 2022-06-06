@@ -1,0 +1,80 @@
+{% extends "dashboard/base/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="card">
+    <div class="table-responsive">
+        <table class="table align-items-center mb-0">
+            <thead>
+                <tr>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bold ps-2">Name</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bold ps-2">Status</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bold ps-2">Actual Stock</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bold ps-2">Action</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bold ps-2">Change Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if request.user.user_type == 'attendant' and planes %}
+                    <tr>
+                        <td>
+                            <span class="text-dark text-xs font-weight-bold">{{ planes.name }}</span>
+                        </td>
+                        <td>
+                            {% if planes.status == 'air' %}
+                                <span class="text-dark text-xs font-weight-bold badge text-success">Air</span>
+                            {% else %}
+                                <span class="text-dark text-xs font-weight-bold badge text-danger">Land</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ planes.get_actual_stock }}</td>
+                        <td>
+                            {% if planes.status == 'air' %}
+                                <a href="{% url 'inventory:order' planes.pk %}" class="btn btn-primary">Order</a>
+                            {% else %}
+                                <a href="" class="btn btn-secondary disabled">Order</a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if planes.status == 'air' %}
+                                <a href="{% url 'inventory:change_plane_status' planes.pk %}" class="btn btn-info">Change to Land</a>
+                            {% else %}
+                            <a href="{% url 'inventory:change_plane_status' planes.pk %}" class="btn btn-success">Change to Air</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td  colspan="3" class="text-center text-danger">No Plane Found!</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<h6 class="mt-4">Products</h6>
+<table class="table align-items-center mt-4">
+    <thead>
+        <tr>
+            <th class="text-uppercase text-dark text-xxs font-weight-bold ps-2">Name</th>
+            <th class="text-uppercase text-dark text-xxs font-weight-bold ps-2">Quantity</th>
+            <th class="text-uppercase text-dark text-xxs font-weight-bold ps-2">Max Stock</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stock in planes.planestock.all %}
+            <tr>
+                <td>
+                    <span class="text-dark text-xs font-weight-bold">{{ stock.product_id.name }}</span>
+                </td>
+                <td>{{ stock.quantity }}</td>
+                <td>{{ stock.maximum_quantity }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td  colspan="3" class="text-center text-danger">No Stock Found!</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

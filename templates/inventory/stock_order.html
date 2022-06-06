@@ -1,0 +1,76 @@
+{% extends "dashboard/base/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block stylesheets %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="card row bg-info text-white">
+    <div class="col-md-12 bg-info text-white p-4">
+        <div class="row">
+            <div class="col-md-8 col-lg-8">
+                <h5>
+                    <i class="fa fa-edit"></i> <strong class="my-floor"> CREATE ORDER</strong>
+                </h5>
+            </div>                 
+        </div>
+    </div>
+    <div class="col-md-12 bg-white text-dark p-4">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="row form-group mb-4">
+                        <div class="col-md-4">
+                            <select class="form-control" id="base" name="base">
+                                <option value="">Select Base</option>
+                                {% for base in bases %}
+                                    <option value="{{ base.pk }}">{{ base.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="date" name="date" id="date" class="form-control" required>
+                        </div>
+                    </div>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p class="text-danger text-center font-weight-bold p-4">{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                    <table class="table table-strip table-hover table-bordered mt-4">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Max Stock</th>
+                                <th>Order Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stock in plane.planestock.all %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ stock.product_id.name }}</td>
+                                <td>{{ stock.quantity }}</td>
+                                <td>{{ stock.maximum_quantity }}</td>
+                                <td>
+                                    <input type="number" class="form-control" name="{{ stock.id }}_quantity" id="{{ stock.id }}_quantity" placeholder="Enter quantity">
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="text-center">
+                        <button class="btn btn-info w-50 text-center" type="submit">CREATE ORDER</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

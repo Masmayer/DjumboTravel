@@ -1,0 +1,126 @@
+{% extends "dashboard/base/base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Plane</p>
+                                <h5 class="font-weight-bolder mb-0">
+                                    {{ plane }}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                                <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Order</p>
+                                <h5 class="font-weight-bolder mb-0">
+                                    {{ order }}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                                <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Attendants</p>
+                                <h5 class="font-weight-bolder mb-0">
+                                    {{ attendant }}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                                <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Provider</p>
+                                <h5 class="font-weight-bolder mb-0">
+                                    {{ provider }}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                                <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <table class="table align-items-center mb-0">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase text-dark text-xxs font-weight-bold ps-2">SL</th>
+                        <th class="text-uppercase text-dark text-xxs font-weight-bold ps-2">Name</th>
+                        <th class="text-uppercase text-dark text-xxs font-weight-bold ps-2">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for plane in planes %}
+                        <tr>
+                            <td>
+                                <span class="text-dark text-xs font-weight-bold">{{ forloop.counter }}</span>
+                            </td>
+                            <td>
+                                <span class="text-dark text-xs font-weight-bold">{{ plane.name }}</span>
+                            </td>
+                            <td>
+                                {% if plane.status == 'air' %}
+                                    <span class="text-dark text-xs font-weight-bold badge text-success">Air</span>
+                                {% else %}
+                                    <span class="text-dark text-xs font-weight-bold badge text-danger">Land</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td  colspan="3" class="text-center text-danger">No Plane Found!</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>    
+{% endblock content %}

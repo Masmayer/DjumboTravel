@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JumboTravel| Order</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <style>
+    table, td, th {
+        border: 1px solid black;
+        padding: 2px;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+  </style>
+</head>
+<body class="hold-transition sidebar-mini">
+
+{% for order in orders %}
+<div class="wrapper">
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Order Details</h1>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <div class="invoice p-3 mb-3">
+        <!-- title row -->
+        <div class="row">
+          <div class="col-12">
+            <h4>
+              <i class="fas fa-globe"></i> JumboTravel.
+              <small class="float-right">Date: {{ order.date }}</small>
+            </h4>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- info row -->
+        <div class="row invoice-info">
+          <div class="col-sm-4 invoice-col">
+            <address>
+              <strong>JumboTravel.</strong><br>
+              795 Folsom Ave, Suite 600<br>
+              San Francisco, CA 94107<br>
+              Phone: (804) 123-5432<br>
+              Email: info@jumbotravel.com
+            </address>
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-4 invoice-col">
+            <b>Order ID:</b> {{ order.pk }}<br>
+            <b>Order Date:</b> {{ order.date }}<br>
+            <b>Attendant:</b> {{ order.attendant_id.user_id.name }}<br>
+            <b>Provider:</b> {{ order.providers.user_id.name }}<br>
+            <b>Base:</b> {{ order.base.name }}<br>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <!-- Table row -->
+        <div class="row">
+          <div class="col-12 table-responsive">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Qty</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Fill Quantity</th>
+                <th>Price</th>
+                <th>Total Price</th>
+              </tr>
+              </thead>
+              <tbody>
+                  {% for line in order.orderline.all %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ line.product_id.name }}</td>
+                        <td>{{ line.quantity }}</td>
+                        <td>{{ line.fill_quantity }}</td>
+                        <td>{{ line.product_id.price }}</td>
+                        <td>{{ line.total_product_price }}</td>
+                    </tr>
+                    {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <!-- /.col -->
+        </div>
+      </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <footer style="padding-top: 10px; margin-top: 10px;">
+    <strong>Copyright &copy; 2022 <a href="">JumboTravel</a>.</strong> All rights reserved.
+  </footer>
+</div>
+<!-- ./wrapper -->
+{% empty %}
+  <p style="color: red">No order found</p>
+{% endfor %}
+</body>
+</html>
